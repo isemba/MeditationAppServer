@@ -24,12 +24,13 @@ app.get("/hello/:name", (req, res)=>{
 
 const dbUser = process.env.DDB_USER;
 const dbPass = process.env.DDB_PASS;
+const port = process.env.PORT || 5000;
 
 if(!dbUser || !dbPass){
     console.error("DocumentDB DDB_USER OR DDB_PASS NOT FOUND!");
     process.exit(1);
 }
 
-app.listen(3000, ()=>{
-    console.log("server has started listening on port 3000");
+app.listen(port, ()=>{
+    console.log("server has started listening on port " + port);
 });
