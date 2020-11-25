@@ -24,6 +24,12 @@ export class CacheController{
         this.client = redis.createClient();
         this.getAsync = util.promisify(this.client.get).bind(this.client);
         this.setAsync = util.promisify(this.client.set).bind(this.client);
+
+        JSON.stringify([
+            {title: "popular 1", url: "popular1.url", type: 0},
+            {title: "popular 2", url: "popular2.url", type: 2},
+            {title: "popular 3", url: "popular3.url", type: 1},
+        ])
     }
 
     public getPopular(){
