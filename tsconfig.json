@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "umd",
+    "moduleResolution": "Node",
+    "declaration": false,
+    "target": "es5",
+    "sourceMap": true,
+    "outDir": "dist/",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
+    "typeRoots" : ["./node_modules/@types/"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "typeAcquisition": {
+    "enable": false
+  },
+  "compileOnSave": true
+}

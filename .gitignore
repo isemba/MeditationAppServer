@@ -2,3 +2,7 @@ node_modules
 .DS_Store
 *.pem
 .env
+/dist
+/dist/**/*.js
+/dist/**/*.map
+.idea
