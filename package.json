@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
-    "update": "rm -rf ./dist && git pull origin master && npm run build && cp .env *.pem ./dist/.env "
+    "update": "rm -rf ./dist && git pull origin master && npm run build && cp .env *.pem ./dist/"
   },
   "author": "Hakan Nurel",
   "license": "ISC",
