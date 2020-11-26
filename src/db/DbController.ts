@@ -3,6 +3,7 @@ import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model, Promise} from "mongoose";
 import {PopularSchema} from "./Schema/PopularSchema";
+import fs = require("fs");
 
 export class DbController{
     private readonly _uri: string;
@@ -24,14 +25,13 @@ export class DbController{
     constructor(uri: string) {
 
         this._uri = uri;
-        console.log("uri: ", uri);
         this.connect();
-        //const ca = [fs.readFileSync( process.cwd() + "/rds-combined-ca-bundle.pem")];
 
     }
 
     private connect(){
         console.log("connecting to mongo...");
+        const ca = [fs.readFileSync( process.cwd() + "/rds-combined-ca-bundle.pem")];
 
         try {
             mongoose.set('useFindAndModify', false);
@@ -39,7 +39,9 @@ export class DbController{
             const options = {
                 useNewUrlParser: true,
                 poolSize: 8,
-                useUnifiedTopology: true
+                useUnifiedTopology: true,
+                sslValidate: true,
+                sslCA: ca
             }
 
             mongoose.connect(this._uri, options, err=>{
