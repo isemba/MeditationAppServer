@@ -21,6 +21,7 @@ export class LoginService{
         const popular = await CacheController.getInstance().getPopular();
         const discover = await CacheController.getInstance().getDiscover();
         const blog = await CacheController.getInstance().getBlog();
-        return { today: "today.url", popular, discover, blog };
+        const music = await CacheController.getInstance().getMusic();
+        return { today: "https://i.pinimg.com/originals/29/ea/39/29ea39286147625e05117ca9e35a3889.jpg", popular, discover, blog, music };
     }
 }

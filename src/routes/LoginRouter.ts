@@ -15,6 +15,7 @@ export class LoginRouter extends AppRouter{
         this.router = Router();
         this.service = new LoginService();
         this.router.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
             next();
         });
 

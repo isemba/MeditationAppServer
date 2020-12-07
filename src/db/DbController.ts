@@ -31,7 +31,7 @@ export class DbController{
 
     private connect(){
         console.log("connecting to mongo...");
-        const ca = [fs.readFileSync( process.cwd() + "/rds-combined-ca-bundle.pem")];
+        //const ca = [fs.readFileSync( process.cwd() + "/rds-combined-ca-bundle.pem")];
 
         try {
             mongoose.set('useFindAndModify', false);
@@ -39,9 +39,7 @@ export class DbController{
             const options = {
                 useNewUrlParser: true,
                 poolSize: 8,
-                useUnifiedTopology: true,
-                sslValidate: true,
-                sslCA: ca
+                useUnifiedTopology: true
             }
 
             mongoose.connect(this._uri, options, err=>{
