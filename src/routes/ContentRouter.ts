@@ -1,28 +1,33 @@
 import {AppRouter} from "./AppRouter";
 import { Router, Response, Request } from "express";
 import {StatusCodes} from "http-status-codes";
+import {ContentService} from "../db/Service/ContentService";
 import {Auth} from "./Auth";
 
 export class ContentRouter extends AppRouter{
     router: Router;
 
-    constructor() {
+    private service: ContentService;
+
+    constructor(service: ContentService) {
         super();
         this.router = Router();
+        this.service = service;
 
         this.addRoutes();
     }
 
     addRoutes(): void {
-        this.router.get("/videos", this.getVideosInfo);
-        //this.router.post("/videos", Auth.checkToken, this.getVideos);
+        this.router.post("/", Auth.checkToken, this.getVideosInfo.bind(this));
     }
 
-    private getVideosInfo(req: Request, res: Response){
-        res.status(StatusCodes.OK).send({
-            info : "There is 2 video content",
-            size: 2
-        });
+    private async getVideosInfo(req: Request, res: Response){
+        try {
+            let content = this.service.getContents();
+            res.status(StatusCodes.OK).send(content);
+        }catch (e){
+
+        }
     }
 
     private getVideos(req: Request, res: Response){

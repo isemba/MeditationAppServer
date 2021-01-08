@@ -2,72 +2,67 @@ import mongoose = require("mongoose");
 import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model, Promise} from "mongoose";
-import {PopularSchema} from "./Schema/PopularSchema";
+import {ContentSchema} from "./Schema/ContentSchema";
 import fs = require("fs");
+import {ContentModel} from "./Model/ContentModel";
 
 export class DbController{
     private readonly _uri: string;
 
-    private static instance: DbController;
-    public static getInstance():DbController{
-        return this.instance;
-    }
-    public static init(uri:string){
-        if(this.instance == null){
-            this.instance = new DbController(uri)
-        }
-    }
-
-    private static userModel : Model<any>;
-    private static popularModel : Model<any>;
-
+    private userModel : Model<any>;
+    private popularModel : Model<any>;
+    private contentModel : Model<any>;
 
     constructor(uri: string) {
-
         this._uri = uri;
-        this.connect();
-
     }
 
-    private connect(){
+    public connect():Promise<boolean>{
         console.log("connecting to mongo...");
         //const ca = [fs.readFileSync( process.cwd() + "/rds-combined-ca-bundle.pem")];
 
-        try {
-            mongoose.set('useFindAndModify', false);
+        return new Promise((resolve, reject)=>{
+            try {
+                mongoose.set('useFindAndModify', false);
 
-            const options = {
-                useNewUrlParser: true,
-                poolSize: 8,
-                useUnifiedTopology: true
-            }
-
-            mongoose.connect(this._uri, options, err=>{
-                if(err){
-                    console.log(err.message);
-                }else{
-                    console.log("mongo connected!");
+                const options = {
+                    useNewUrlParser: true,
+                    poolSize: 8,
+                    useUnifiedTopology: true
                 }
-            });
 
-            DbController.userModel = mongoose.model("users", new UserSchema().schema);
-            DbController.popularModel = mongoose.model("popular", new PopularSchema().schema);
+                this.userModel = mongoose.model("users", new UserSchema().schema);
+                this.popularModel = mongoose.model("populars", new ContentSchema().schema);
+                this.contentModel = mongoose.model("contents", new ContentSchema().schema);
 
-        }catch (e){
-            console.log("mongo connection failed!!!");
-        }
+                mongoose.connect(this._uri, options, err=>{
+                    if(err){
+                        console.log(err.message);
+                        reject(err);
+                    }else{
+                        console.log("mongo connected!");
+                        resolve(true);
+                    }
+                });
+
+            }catch (e){
+                console.log("mongo connection failed!!!");
+                reject(e);
+            }
+        })
     }
 
     public createUser(user:UserModel):Promise<UserModel>{
        return new Promise((resolve, reject)=>{
           try {
-              const model = new DbController.userModel(user);
+              const model = new this.userModel(user);
               model.save((err, data) =>{
                   if (err) return reject(err);
                   const newUser = new UserModel();
                   newUser._id = data._id.toHexString();
                   newUser.deviceId = data.deviceId;
                   newUser.name = data.name;
+                  newUser.contents = [];
                   resolve(newUser);
               });
           }catch (e){
@@ -76,10 +71,24 @@ export class DbController{
        });
     }
 
+    public createContent(contentModel:ContentModel):Promise<string>{
+        return new Promise((resolve, reject)=>{
+            try {
+                const model = new this.contentModel(contentModel);
+                model.save((err, data) =>{
+                    if (err) return reject(err);
+                    resolve("yey");
+                });
+            }catch (e){
+                reject(e);
+            }
+        });
+    }
+
     public getUser(id:string): Promise<UserModel>{
         return new Promise((resolve, reject) => {
             try {
-                DbController.userModel.findById(id, (err, res)=>{
+                this.userModel.findById(id, (err, res)=>{
                     if(err) return reject(err);
 
                     resolve(res);
@@ -93,7 +102,7 @@ export class DbController{
     public getUserByDevice(deviceId:string): Promise<UserModel | null>{
         return new Promise((resolve, reject) => {
             try {
-                DbController.userModel.findOne({deviceId}, (err, res)=>{
+                this.userModel.findOne({deviceId}, (err, res)=>{
                     if(err) return reject(err);
 
                     if(res == null){
@@ -104,6 +113,7 @@ export class DbController{
                         user.name = res.name;
                         user.deviceId = res.deviceId;
 
+
                         resolve(user);
                     }
 
@@ -112,5 +122,26 @@ export class DbController{
                 reject(e);
             }
         });
+    }
+
+    public getContent(): Promise<ContentModel[]>{
+        return new Promise((resolve, reject) => {
+            try {
+                this.contentModel.find( {}, (err, res)=>{
+                    if(err) return reject(err);
+                    resolve(res);
+                })
+            }catch (e){
+                reject(e);
+            }
+        });
+    }
+
+    public updateUserContents(cid:string, userId:string){
+        // try {
+        //     this.userModel.updateOne({_id: userId}, {$push: { contents: cid }})
+        // }catch (e){
+        //
+        // }
     }
 }

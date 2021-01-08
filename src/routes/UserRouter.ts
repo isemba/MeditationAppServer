@@ -1,19 +1,22 @@
 import {AppRouter} from "./AppRouter";
 import { Router, Request, Response } from "express";
 import {StatusCodes} from "http-status-codes";
-import {LoginService} from "../db/Service/LoginService";
+import {ContentService} from "../db/Service/ContentService";
 import {UserModel} from "../db/Model/UserModel";
 import {Auth} from "./Auth";
+import {UserService} from "../db/Service/UserService";
 
-
-export class LoginRouter extends AppRouter{
+export class UserRouter extends AppRouter{
     router: Router;
-    private service: LoginService;
+    private userService: UserService;
+    private contentService: ContentService;
 
-    constructor() {
+
+    constructor(userService: UserService, contentService: ContentService) {
         super();
         this.router = Router();
-        this.service = new LoginService();
+        this.userService = userService;
+        this.contentService = contentService;
         this.router.use((req, res, next) => {
             res.header('Access-Control-Allow-Origin', '*');
             next();
@@ -23,18 +26,23 @@ export class LoginRouter extends AppRouter{
     }
 
     addRoutes(): void {
-        this.router.post("/", this.login.bind(this));
+        this.router.post("/login", this.login.bind(this));
+        this.router.post("/content", Auth.checkToken, this.addContent.bind(this));
     }
 
     private async login(req: Request, res: Response){
         const { name, deviceId } = req.body;
 
         try {
-            const user : UserModel | null = await this.service.getUserByDeviceId(deviceId);
-            const initial = await this.service.getInitialContent();
+            if(name == null || deviceId == null){
+                return res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu!"});
+            }
+
+            const user : UserModel | null = await this.userService.getUserByDeviceId(deviceId);
+            const initial = await this.contentService.getInitialContent();
             if(user == null){
                 try {
-                    const created = await this.service.createUser({name, deviceId});
+                    const created = await this.userService.createUser({name, deviceId});
                     const token = this.getToken(name, deviceId, created._id);
 
                     res.status(StatusCodes.CREATED).send({ token, initial });
@@ -58,6 +66,15 @@ export class LoginRouter extends AppRouter{
         const payload = { name, deviceId, id, at: Date.now() }
         const json = JSON.stringify(payload);
         return Auth.getEncrypt(json);
+    }
+
+    private async addContent(req: Request, res: Response){
+        const { cid, id } = req.body;
+        try {
+            this.userService.addContent(cid, id);
+        }catch (e){
+
+        }
     }
 
 

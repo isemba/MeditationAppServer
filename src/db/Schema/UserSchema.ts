@@ -6,7 +6,8 @@ export class UserSchema{
         this._schema = new Schema({
             deviceId: String,
             name: String,
-            age:Number
+            age:Number,
+            contents: Array
         });
     }
 
