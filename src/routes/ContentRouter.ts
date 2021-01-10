@@ -18,12 +18,14 @@ export class ContentRouter extends AppRouter{
     }
 
     addRoutes(): void {
-        this.router.post("/", Auth.checkToken, this.getVideosInfo.bind(this));
+        this.router.post("/", Auth.checkToken, this.getInfo.bind(this));
     }
 
-    private async getVideosInfo(req: Request, res: Response){
+    private async getInfo(req: Request, res: Response){
         try {
-            let content = this.service.getContents();
+            let { media } = req.body;
+            if(media == null) return res.status(StatusCodes.BAD_REQUEST).send({message: "media needed!"});
+            let content = this.service.getContents(media);
             res.status(StatusCodes.OK).send(content);
         }catch (e){
 

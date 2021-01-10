@@ -79,8 +79,8 @@ export class ContentService{
         }
     }
 
-    public getContents(): ContentModel[]{
-        return this.contents;
+    public getContents(filter:string): ContentModel[]{
+        return this.contents.filter(content => content.media === filter);
     }
 
 
@@ -95,6 +95,7 @@ export class ContentService{
 
     public async getInitialContent(){
         return {
+            baseUrl: process.env.IMAGE_URL,
             today: this.getTodayImage(),
             popular : JSON.stringify(this.homeContents.popular),
             discover : JSON.stringify(this.homeContents.discover),

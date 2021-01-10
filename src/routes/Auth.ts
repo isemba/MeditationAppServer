@@ -1,7 +1,5 @@
 import {StatusCodes} from "http-status-codes";
 import Cryptr = require('cryptr');
-import {CacheController} from "../redis/CacheController";
-import {UserModel} from "../db/Model/UserModel";
 
 export class Auth{
     private static cryptr: Cryptr;
