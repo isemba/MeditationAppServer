@@ -23,11 +23,12 @@ export class UserRouter extends AppRouter{
         });
 
         this.addRoutes();
+
     }
 
     addRoutes(): void {
         this.router.post("/login", this.login.bind(this));
-        this.router.post("/content", Auth.checkToken, this.addContent.bind(this));
+        this.router.post("/update", Auth.checkToken, this.updateStats.bind(this));
     }
 
     private async login(req: Request, res: Response){
@@ -45,7 +46,12 @@ export class UserRouter extends AppRouter{
                     const created = await this.userService.createUser({name, deviceId});
                     const token = this.getToken(name, deviceId, created._id);
 
-                    res.status(StatusCodes.CREATED).send({ token, initial });
+                    const stats = {
+                        days: 1,
+                        totalDuration: 0,
+                        totalMeditations: 0
+                    };
+                    res.status(StatusCodes.CREATED).send({ token, initial, stats });
                 }catch (e){
                     console.error(e.message);
                     res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu!"});
@@ -53,7 +59,12 @@ export class UserRouter extends AppRouter{
 
             }else{
                 const token = this.getToken(name, deviceId, user._id);
-                res.status(StatusCodes.ACCEPTED).send({ token, initial });
+                const stats = {
+                    days: 3,
+                    totalDuration: 30,
+                    totalMeditations: 4
+                };
+                res.status(StatusCodes.ACCEPTED).send({ token, initial, stats });
             }
 
         }catch (e){
@@ -68,17 +79,14 @@ export class UserRouter extends AppRouter{
         return Auth.getEncrypt(json);
     }
 
-    private async addContent(req: Request, res: Response){
-        const { cid, id } = req.body;
+    private async updateStats(req: Request, res: Response){
+        const { cid, session } = req.body;
         try {
-            this.userService.addContent(cid, id);
+            await this.userService.updateStats(cid, session.id);
+            res.status(StatusCodes.OK).send({status: "güncellendi!"});
         }catch (e){
-
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Bir hata oluştu!");
         }
     }
-
-
-
-
 
 }

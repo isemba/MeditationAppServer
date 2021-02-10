@@ -16,7 +16,7 @@ export class UserService {
         return this.dbController.createUser(user);
     }
 
-    public addContent(cid: string, userId: string){
-        this.dbController.updateUserContents(cid, userId);
+    public updateStats(cid: number, userId: string){
+        return this.dbController.updateUserContents(cid, userId);
     }
 }

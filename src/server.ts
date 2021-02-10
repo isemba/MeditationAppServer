@@ -4,6 +4,7 @@ import env = require('dotenv');
 import { UserRouter } from "./routes/UserRouter";
 import { DbController } from "./db/DbController";
 import { ContentRouter } from "./routes/ContentRouter";
+import { ContactRouter } from "./routes/ContactRouter";
 import { Auth } from "./routes/Auth";
 import {CacheController} from "./redis/CacheController";
 import {ContentService} from "./db/Service/ContentService";
@@ -36,6 +37,8 @@ const app = express();
         app.use(bodyParser.json());
         app.use("/user", new UserRouter(userService, contentService).router);
         app.use("/content", new ContentRouter(contentService).router);
+        app.use("/contact", new ContactRouter(contentService).router);
+
 
         app.listen(port, (): void => {
             console.log("server has started listening on port " + port);

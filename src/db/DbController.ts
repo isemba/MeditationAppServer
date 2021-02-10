@@ -1,9 +1,8 @@
 import mongoose = require("mongoose");
 import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
-import {Model, Promise} from "mongoose";
+import {Model} from "mongoose";
 import {ContentSchema} from "./Schema/ContentSchema";
-import fs = require("fs");
 import {ContentModel} from "./Model/ContentModel";
 
 export class DbController{
@@ -137,11 +136,16 @@ export class DbController{
         });
     }
 
-    public updateUserContents(cid:string, userId:string){
-        // try {
-        //     this.userModel.updateOne({_id: userId}, {$push: { contents: cid }})
-        // }catch (e){
-        //
-        // }
+    public async updateUserContents(cid:number, userId:string): Promise<boolean>{
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await this.userModel.findOne({_id: userId});
+                user.contents.push(cid);
+                user.save();
+                resolve(true);
+            }catch (e){
+                reject(e);
+            }
+        });
     }
 }
