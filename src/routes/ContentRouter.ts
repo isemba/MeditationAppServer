@@ -25,7 +25,7 @@ export class ContentRouter extends AppRouter{
         try {
             let { media } = req.body;
             if(media == null) return res.status(StatusCodes.BAD_REQUEST).send({message: "media needed!"});
-            let content = this.service.getContents(media);
+            let content = this.service.getFilteredContents(media);
             res.status(StatusCodes.OK).send(content);
         }catch (e){
 

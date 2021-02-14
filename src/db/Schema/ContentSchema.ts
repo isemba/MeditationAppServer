@@ -10,7 +10,8 @@ export class ContentSchema{
             image: String,
             url: String,
             body: String,
-            desc: String
+            desc: String,
+            group: Object
         });
     }
 

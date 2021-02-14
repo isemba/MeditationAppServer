@@ -9,4 +9,28 @@ export class ContentModel{
     image:string;
     body?: string;
     desc?: string;
+    group: GroupModel;
+}
+
+export class DefaultsModel{
+    discover: string[];
+    blog: string[];
+    popular: string[];
+    music: string[];
+    moods: MoodModel[]
+}
+
+export class MoodModel{
+    title : string;
+    cardId: string;
+}
+
+export class MenuItemModel{
+    title: string;
+    meditations: ContentModel[];
+}
+
+export class GroupModel{
+    title: string;
+    id: number;
 }

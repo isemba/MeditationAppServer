@@ -3,14 +3,15 @@ import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model} from "mongoose";
 import {ContentSchema} from "./Schema/ContentSchema";
-import {ContentModel} from "./Model/ContentModel";
+import {ContentModel, DefaultsModel} from "./Model/ContentModel";
+import {DefaultsSchema} from "./Schema/DefaultsSchema";
 
 export class DbController{
     private readonly _uri: string;
 
     private userModel : Model<any>;
-    private popularModel : Model<any>;
     private contentModel : Model<any>;
+    private defaultsModel : Model<any>;
 
     constructor(uri: string) {
         this._uri = uri;
@@ -31,8 +32,8 @@ export class DbController{
                 }
 
                 this.userModel = mongoose.model("users", new UserSchema().schema);
-                this.popularModel = mongoose.model("populars", new ContentSchema().schema);
                 this.contentModel = mongoose.model("contents", new ContentSchema().schema);
+                this.defaultsModel = mongoose.model("defaults", new DefaultsSchema().schema);
 
                 mongoose.connect(this._uri, options, err=>{
                     if(err){
@@ -127,6 +128,19 @@ export class DbController{
         return new Promise((resolve, reject) => {
             try {
                 this.contentModel.find( {}, (err, res)=>{
+                    if(err) return reject(err);
+                    resolve(res);
+                })
+            }catch (e){
+                reject(e);
+            }
+        });
+    }
+
+    public getDefaults(): Promise<DefaultsModel>{
+        return new Promise((resolve, reject) => {
+            try {
+                this.defaultsModel.findOne( {}, (err, res)=>{
                     if(err) return reject(err);
                     resolve(res);
                 })

@@ -1,6 +1,6 @@
 import {DbController} from "../DbController";
 import {CacheController} from "../../redis/CacheController";
-import {ContentModel} from "../Model/ContentModel";
+import {ContentModel, DefaultsModel, MenuItemModel} from "../Model/ContentModel";
 
 export class ContentService{
     private dbController:DbController;
@@ -10,8 +10,24 @@ export class ContentService{
         discover: ContentModel[],
         blog: ContentModel[],
         music: ContentModel[],
-        popular: ContentModel[]
+        popular: ContentModel[],
+        starter: ContentModel,
+        moods: ContentModel[]
     }
+    private menuFilters: {filter: string, items: MenuItemModel[]}[] = [
+        {
+            filter: "blog",
+            items: [],
+        },
+        {
+            filter: "music",
+            items: [],
+        },
+        {
+            filter: "video",
+            items: [],
+        }
+    ];
 
     private discoverList : ContentModel[];
     private blogList : ContentModel[];
@@ -25,15 +41,7 @@ export class ContentService{
     async loadContents() {
         try {
             const contents: ContentModel[] = await this.dbController.getContent();
-            const cachedDiscoverList : string = await CacheController.getInstance().getDiscover();
-            const cachedBlogList : string = await CacheController.getInstance().getBlog();
-            const cachedMusicList : string = await CacheController.getInstance().getMusic();
-            const cachedPopularList : string = await CacheController.getInstance().getPopular();
-
-            const discoverIds = cachedDiscoverList != null ? JSON.parse(cachedDiscoverList) : ["40", "41", "36", "25", "13"];
-            const blogIds = cachedBlogList != null ? JSON.parse(cachedBlogList) : ["48", "66", "51", "54", "63"];
-            const musicIds = cachedMusicList != null ? JSON.parse(cachedMusicList) : ["M7", "M44", "M20", "M89", "M64"];
-            const popularIds = cachedPopularList != null ? JSON.parse(cachedPopularList) : ["2", "7", "6", "53", "M7"];
+            const defaults: DefaultsModel = await this.dbController.getDefaults();
 
             const discoverList : ContentModel[] = [];
             const blogList : ContentModel[] = [];
@@ -43,7 +51,9 @@ export class ContentService{
                 discover: [],
                 blog: [],
                 music: [],
-                popular: []
+                popular: [],
+                moods: [],
+                starter: null
             }
 
             contents.forEach((content, index) => {
@@ -55,32 +65,74 @@ export class ContentService{
                    discoverList.push(content);
                }
 
-               if(discoverIds.indexOf(content.cid) > -1){
+               if(defaults.discover.indexOf(content.cid) > -1){
                    homeContents.discover.push(content);
-               }else if(blogIds.indexOf(content.cid) > -1){
+               }else if(defaults.blog.indexOf(content.cid) > -1){
                    homeContents.blog.push(content);
-               }else if(musicIds.indexOf(content.cid) > -1){
+               }else if(defaults.music.indexOf(content.cid) > -1){
                   homeContents.music.push(content);
-               }else if(popularIds.indexOf(content.cid) > -1){
+               }else if(defaults.popular.indexOf(content.cid) > -1){
                   homeContents.popular.push(content);
+               }
+
+               if(content.cid === "1"){
+                   homeContents.starter = content;
                }
 
             });
 
+            defaults.moods.forEach(mood => {
+                const content = this.getContent(contents, mood.cardId);
+                if(content){
+                    content.title = mood.title;
+                    homeContents.moods.push(content);
+                }
+            });
 
+            this.contents = contents;
+            this.menuFilters.forEach(menuItem => {
+                menuItem.items = this.getContents(menuItem.filter);
+            })
             this.homeContents = homeContents;
             this.blogList = blogList;
             this.discoverList = discoverList;
             this.musicList = musicList;
-            this.contents = contents;
+
+
+
 
         }catch (e){
             throw new Error(e);
         }
     }
 
-    public getContents(filter:string): ContentModel[]{
-        return this.contents.filter(content => content.media === filter);
+    public getContents(filter:string): MenuItemModel[]{
+        const filteredContent = this.contents.filter(content => content.media === filter);
+        const items: MenuItemModel[] = [];
+
+        let lastGroupId = -1;
+        filteredContent.forEach(content =>{
+            if(lastGroupId !== content.group.id){
+                lastGroupId = content.group.id;
+                const menuItem = new MenuItemModel();
+                menuItem.meditations = [content];
+                menuItem.title = content.group.title;
+                items.push(menuItem);
+            }else{
+                items[items.length - 1].meditations.push(content);
+            }
+        });
+        return items;
+    }
+
+    public getFilteredContents(filter:string): MenuItemModel[]{
+        let shift = this.menuFilters.filter(menu => menu.filter === filter).shift();
+        if(shift){
+            return shift.items;
+        }else{
+            return null;
+        }
+
     }
 
 
@@ -100,7 +152,14 @@ export class ContentService{
             popular : JSON.stringify(this.homeContents.popular),
             discover : JSON.stringify(this.homeContents.discover),
             blog : JSON.stringify(this.homeContents.blog),
-            music : JSON.stringify(this.homeContents.music)
+            music : JSON.stringify(this.homeContents.music),
+            starter: JSON.stringify(this.homeContents.starter),
+            moods: JSON.stringify(this.homeContents.moods)
         };
+    }
+
+    private getContent(contents: ContentModel[], cardId: string) {
+        const filtered = contents.filter(cont => cont.cid === cardId);
+        return filtered.shift();
     }
 }
