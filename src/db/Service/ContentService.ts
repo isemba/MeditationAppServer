@@ -112,15 +112,19 @@ export class ContentService{
 
         let lastGroupId = -1;
         filteredContent.forEach(content =>{
-            if(lastGroupId !== content.group.id){
-                lastGroupId = content.group.id;
-                const menuItem = new MenuItemModel();
-                menuItem.meditations = [content];
-                menuItem.title = content.group.title;
-                items.push(menuItem);
-            }else{
-                items[items.length - 1].meditations.push(content);
+            if(content.group.id > 1){
+                if(lastGroupId !== content.group.id){
+                    lastGroupId = content.group.id;
+                    const menuItem = new MenuItemModel();
+                    menuItem.meditations = [content];
+                    menuItem.title = content.group.title;
+                    items.push(menuItem);
+                }else{
+                    items[items.length - 1].meditations.push(content);
+                }
             }
+
+
         });
         return items;
     }
