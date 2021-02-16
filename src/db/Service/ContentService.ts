@@ -1,6 +1,6 @@
 import {DbController} from "../DbController";
 import {CacheController} from "../../redis/CacheController";
-import {ContentModel, DefaultsModel, MenuItemModel} from "../Model/ContentModel";
+import {ContentModel, DefaultsModel, MenuItemModel, ThemeModel} from "../Model/ContentModel";
 
 export class ContentService{
     private dbController:DbController;
@@ -12,7 +12,8 @@ export class ContentService{
         music: ContentModel[],
         popular: ContentModel[],
         starter: ContentModel,
-        moods: ContentModel[]
+        moods: ContentModel[],
+        themes: ThemeModel[]
     }
     private menuFilters: {filter: string, items: MenuItemModel[]}[] = [
         {
@@ -42,6 +43,7 @@ export class ContentService{
         try {
             const contents: ContentModel[] = await this.dbController.getContent();
             const defaults: DefaultsModel = await this.dbController.getDefaults();
+            const themes: ThemeModel[] = await this.dbController.getThemes();
 
             const discoverList : ContentModel[] = [];
             const blogList : ContentModel[] = [];
@@ -53,6 +55,7 @@ export class ContentService{
                 music: [],
                 popular: [],
                 moods: [],
+                themes,
                 starter: null
             }
 
@@ -158,7 +161,8 @@ export class ContentService{
             blog : JSON.stringify(this.homeContents.blog),
             music : JSON.stringify(this.homeContents.music),
             starter: JSON.stringify(this.homeContents.starter),
-            moods: JSON.stringify(this.homeContents.moods)
+            moods: JSON.stringify(this.homeContents.moods),
+            themes: JSON.stringify(this.homeContents.themes)
         };
     }
 

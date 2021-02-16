@@ -20,6 +20,13 @@ export class DefaultsModel{
     moods: MoodModel[]
 }
 
+export class ThemeModel{
+    name: string;
+    audio: string;
+    video : string;
+    image: string;
+}
+
 export class MoodModel{
     title : string;
     cardId: string;

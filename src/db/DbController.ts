@@ -3,8 +3,9 @@ import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model} from "mongoose";
 import {ContentSchema} from "./Schema/ContentSchema";
-import {ContentModel, DefaultsModel} from "./Model/ContentModel";
+import {ContentModel, DefaultsModel, ThemeModel} from "./Model/ContentModel";
 import {DefaultsSchema} from "./Schema/DefaultsSchema";
+import {ThemeSchema} from "./Schema/ThemeSchema";
 
 export class DbController{
     private readonly _uri: string;
@@ -12,6 +13,7 @@ export class DbController{
     private userModel : Model<any>;
     private contentModel : Model<any>;
     private defaultsModel : Model<any>;
+    private themeModel : Model<any>;
 
     constructor(uri: string) {
         this._uri = uri;
@@ -34,6 +36,7 @@ export class DbController{
                 this.userModel = mongoose.model("users", new UserSchema().schema);
                 this.contentModel = mongoose.model("contents", new ContentSchema().schema);
                 this.defaultsModel = mongoose.model("defaults", new DefaultsSchema().schema);
+                this.themeModel = mongoose.model("themes", new ThemeSchema().schema);
 
                 mongoose.connect(this._uri, options, err=>{
                     if(err){
@@ -141,6 +144,19 @@ export class DbController{
         return new Promise((resolve, reject) => {
             try {
                 this.defaultsModel.findOne( {}, (err, res)=>{
+                    if(err) return reject(err);
+                    resolve(res);
+                })
+            }catch (e){
+                reject(e);
+            }
+        });
+    }
+
+    public getThemes(): Promise<ThemeModel[]>{
+        return new Promise((resolve, reject) => {
+            try {
+                this.themeModel.find( {}, (err, res)=>{
                     if(err) return reject(err);
                     resolve(res);
                 })
