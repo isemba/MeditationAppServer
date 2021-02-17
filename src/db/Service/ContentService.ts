@@ -1,6 +1,6 @@
 import {DbController} from "../DbController";
 import {CacheController} from "../../redis/CacheController";
-import {ContentModel, DefaultsModel, MenuItemModel, ThemeModel} from "../Model/ContentModel";
+import {ContentModel, DefaultsModel, MenuItemModel, MoodModel, ThemeModel} from "../Model/ContentModel";
 
 export class ContentService{
     private dbController:DbController;
@@ -87,8 +87,11 @@ export class ContentService{
             defaults.moods.forEach(mood => {
                 const content = this.getContent(contents, mood.cardId);
                 if(content){
-                    content.title = mood.title;
-                    homeContents.moods.push(content);
+                    const moodContent = {
+                        title: mood.title,
+                        url: content.url
+                    } as ContentModel;
+                    homeContents.moods.push(moodContent);
                 }
             });
 
@@ -118,9 +121,10 @@ export class ContentService{
             if(content.group.id > 1){
                 if(lastGroupId !== content.group.id){
                     lastGroupId = content.group.id;
-                    const menuItem = new MenuItemModel();
-                    menuItem.meditations = [content];
-                    menuItem.title = content.group.title;
+                    const menuItem = {
+                        meditations: [content],
+                        title: content.group.title
+                    } as MenuItemModel;
                     items.push(menuItem);
                 }else{
                     items[items.length - 1].meditations.push(content);

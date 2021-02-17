@@ -1,6 +1,6 @@
 import {Types} from "mongoose";
 
-export class ContentModel{
+export type ContentModel = {
     _id: Types.ObjectId;
     cid: string;
     title: string;
@@ -12,7 +12,7 @@ export class ContentModel{
     group: GroupModel;
 }
 
-export class DefaultsModel{
+export type DefaultsModel = {
     discover: string[];
     blog: string[];
     popular: string[];
@@ -20,24 +20,24 @@ export class DefaultsModel{
     moods: MoodModel[]
 }
 
-export class ThemeModel{
+export type ThemeModel = {
     name: string;
     audio: string;
     video : string;
     image: string;
 }
 
-export class MoodModel{
+export type MoodModel = {
     title : string;
     cardId: string;
 }
 
-export class MenuItemModel{
+export type MenuItemModel = {
     title: string;
     meditations: ContentModel[];
 }
 
-export class GroupModel{
+export type GroupModel = {
     title: string;
     id: number;
 }
