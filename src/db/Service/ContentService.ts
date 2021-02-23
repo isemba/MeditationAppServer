@@ -117,7 +117,8 @@ export class ContentService{
         const items: MenuItemModel[] = [];
 
         let lastGroupId = -1;
-        filteredContent.forEach(content =>{
+        const sorted = filteredContent.sort((current, next) =>  current.group.id - next.group.id );
+        sorted.forEach(content =>{
             if(content.group.id > 1){
                 if(lastGroupId !== content.group.id){
                     lastGroupId = content.group.id;
