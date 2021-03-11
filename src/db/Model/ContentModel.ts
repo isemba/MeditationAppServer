@@ -41,3 +41,9 @@ export type GroupModel = {
     title: string;
     id: number;
 }
+
+export type UserContent = {
+    cid: number,
+    dur: number,
+    time: number;
+}

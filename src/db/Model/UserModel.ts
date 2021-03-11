@@ -1,6 +1,14 @@
+import {UserContent} from "./ContentModel";
+
 export class UserModel{
     _id?: string;
     deviceId: string;
-    name: string;
-    contents?: string [];
+    contents?: UserContent [];
+    last: number;
+    strike: number;
+
+
+    constructor(deviceId: string) {
+        this.deviceId = deviceId;
+    }
 }

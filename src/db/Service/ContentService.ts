@@ -1,11 +1,13 @@
 import {DbController} from "../DbController";
 import {CacheController} from "../../redis/CacheController";
-import {ContentModel, DefaultsModel, MenuItemModel, MoodModel, ThemeModel} from "../Model/ContentModel";
+import {ContentModel, DefaultsModel, MenuItemModel, MoodModel, ThemeModel, UserContent} from "../Model/ContentModel";
+import {Map} from "typescript";
 
 export class ContentService{
     private dbController:DbController;
 
     private contents : ContentModel[];
+    private contentMap : Map<ContentModel>;
     private homeContents : {
         discover: ContentModel[],
         blog: ContentModel[],
@@ -103,7 +105,10 @@ export class ContentService{
             this.blogList = blogList;
             this.discoverList = discoverList;
             this.musicList = musicList;
-
+            this.contentMap = {} as Map<ContentModel>;
+            // this.contents.forEach(cont => {
+            //    this.contentMap.set(cont.cid, cont);
+            // });
 
 
 
@@ -174,5 +179,9 @@ export class ContentService{
     private getContent(contents: ContentModel[], cardId: string) {
         const filtered = contents.filter(cont => cont.cid === cardId);
         return filtered.shift();
+    }
+
+    public getUserStats(contents: UserContent[]) {
+        let duration = 0;
     }
 }

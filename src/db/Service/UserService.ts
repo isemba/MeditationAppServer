@@ -12,11 +12,16 @@ export class UserService {
         return this.dbController.getUserByDevice(deviceId);
     }
 
-    public createUser(user:UserModel): Promise<UserModel>{
+    public createUser(deviceId:string): Promise<UserModel>{
+        const user = new UserModel(deviceId);
         return this.dbController.createUser(user);
     }
 
-    public updateStats(cid: number, userId: string){
-        return this.dbController.updateUserContents(cid, userId);
+    public updateStats(cid: number, dur:number, userId: string){
+        return this.dbController.updateUserContents(cid, dur, userId);
+    }
+
+    public updateStatus(userId: string){
+        this.dbController.updateStatus(userId);
     }
 }

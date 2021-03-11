@@ -32,10 +32,10 @@ export class UserRouter extends AppRouter{
     }
 
     private async login(req: Request, res: Response){
-        const { name, deviceId } = req.body;
+        const { deviceId } = req.body;
 
         try {
-            if(name == null || deviceId == null){
+            if(deviceId == null){
                 return res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu!"});
             }
 
@@ -43,8 +43,8 @@ export class UserRouter extends AppRouter{
             const initial = await this.contentService.getInitialContent();
             if(user == null){
                 try {
-                    const created = await this.userService.createUser({name, deviceId});
-                    const token = this.getToken(name, deviceId, created._id);
+                    const created = await this.userService.createUser(deviceId);
+                    const token = this.getToken(deviceId, created._id);
 
                     const stats = {
                         days: 1,
@@ -58,12 +58,14 @@ export class UserRouter extends AppRouter{
                 }
 
             }else{
-                const token = this.getToken(name, deviceId, user._id);
+                const token = this.getToken(deviceId, user._id);
+               // const stats = this.contentService.getUserStats(user.contents);
                 const stats = {
-                    days: 3,
-                    totalDuration: 30,
-                    totalMeditations: 4
+                    days: 1,
+                    totalDuration: 0,
+                    totalMeditations: 0
                 };
+                this.userService.updateStatus(user._id);
                 res.status(StatusCodes.ACCEPTED).send({ token, initial, stats });
             }
 
@@ -73,16 +75,18 @@ export class UserRouter extends AppRouter{
         }
     }
 
-    private getToken(name, deviceId, id):string{
-        const payload = { name, deviceId, id, at: Date.now() }
+    private getToken(deviceId, id):string{
+        const payload = { deviceId, id, at: Date.now() }
         const json = JSON.stringify(payload);
         return Auth.getEncrypt(json);
     }
 
     private async updateStats(req: Request, res: Response){
-        const { cid, session } = req.body;
+        const { cid, dur, session } = req.body;
+        if(!cid || !dur) return res.status(StatusCodes.BAD_REQUEST).send("Eksik parametre!");
+
         try {
-            await this.userService.updateStats(cid, session.id);
+            await this.userService.updateStats(cid, dur, session.id);
             res.status(StatusCodes.OK).send({status: "güncellendi!"});
         }catch (e){
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Bir hata oluştu!");

@@ -5,9 +5,10 @@ export class UserSchema{
     constructor() {
         this._schema = new Schema({
             deviceId: String,
-            name: String,
             age:Number,
-            contents: Array
+            contents: Array,
+            strike: Number,
+            last: Number
         });
     }
 

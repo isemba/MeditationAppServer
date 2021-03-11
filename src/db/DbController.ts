@@ -3,9 +3,10 @@ import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model} from "mongoose";
 import {ContentSchema} from "./Schema/ContentSchema";
-import {ContentModel, DefaultsModel, ThemeModel} from "./Model/ContentModel";
+import {ContentModel, DefaultsModel, ThemeModel, UserContent} from "./Model/ContentModel";
 import {DefaultsSchema} from "./Schema/DefaultsSchema";
 import {ThemeSchema} from "./Schema/ThemeSchema";
+import {Utils} from "../Utils";
 
 export class DbController{
     private readonly _uri: string;
@@ -59,13 +60,17 @@ export class DbController{
        return new Promise((resolve, reject)=>{
           try {
               const model = new this.userModel(user);
+              model.strike = 0;
+              model.last = Date.now();
+              model.contents = [];
+
               model.save((err, data) =>{
                   if (err) return reject(err);
-                  const newUser = new UserModel();
+                  const newUser = new UserModel(data.deviceId);
                   newUser._id = data._id.toHexString();
-                  newUser.deviceId = data.deviceId;
-                  newUser.name = data.name;
                   newUser.contents = [];
+                  newUser.last = data.last;
+                  newUser.strike = data.strike;
                   resolve(newUser);
               });
           }catch (e){
@@ -111,15 +116,11 @@ export class DbController{
                     if(res == null){
                         resolve(null);
                     }else{
-                        const user = new UserModel();
+                        const user = new UserModel(res.deviceId);
                         user._id = res._id.toHexString();
-                        user.name = res.name;
-                        user.deviceId = res.deviceId;
-
-
+                        user.contents = res.contents;
                         resolve(user);
                     }
-
                 })
             }catch (e){
                 reject(e);
@@ -166,11 +167,30 @@ export class DbController{
         });
     }
 
-    public async updateUserContents(cid:number, userId:string): Promise<boolean>{
+    public async updateUserContents(cid:number, dur:number, userId:string): Promise<boolean>{
         return new Promise(async (resolve, reject) => {
             try {
                 const user = await this.userModel.findOne({_id: userId});
-                user.contents.push(cid);
+                const contents = user.contents as UserContent[];
+                const entry = {
+                    cid,
+                    dur,
+                    time: Date.now()
+                } as UserContent;
+
+                if(contents.length > 0){
+                    const last = contents[user.contents.length - 1];
+                    const strike = Utils.isStrikeTime(last.time);
+                    if(strike === -1){
+                        user.strike = 1;
+                    }else{
+                        user.strike += strike;
+                    }
+                }else{
+                    user.strike = 1;
+                }
+
+                user.contents.push(entry);
                 user.save();
                 resolve(true);
             }catch (e){
@@ -178,4 +198,23 @@ export class DbController{
             }
         });
     }
+
+    public async updateStatus(userId:string){
+        try {
+            const user = await this.userModel.findOne({_id: userId});
+            user.last = Date.now();
+
+            const contents = user.contents as UserContent[];
+            if(contents.length > 0){
+                const lastTime = contents[contents.length - 1].time;
+                if(Utils.isExpiredContentTime(lastTime)){
+                    user.strike = 1;
+                }
+            }
+            user.save();
+        }catch (e){
+
+        }
+    }
+
 }
