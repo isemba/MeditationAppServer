@@ -1,5 +1,7 @@
 export class Utils{
 
+    private static Months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
     private static getTimeParameters(){
         const date = new Date();
         const timeZoneDiff = date.getTimezoneOffset() + 180;
@@ -24,4 +26,17 @@ export class Utils{
         const total = time + (2 * day) - untilNow;
         return total > now;
     }
+
+    public static timeConverter(timestamp){
+        const a = new Date(timestamp);
+
+        const year = a.getFullYear();
+        const month = Utils.Months[a.getMonth()];
+        const date = a.getDate();
+        return date + '/' + month + '/' + year;
+    }
+}
+
+export interface Dict<T> {
+    [index: string]: T;
 }

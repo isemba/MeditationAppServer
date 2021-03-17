@@ -5,6 +5,7 @@ import {ContentService} from "../db/Service/ContentService";
 import {UserModel} from "../db/Model/UserModel";
 import {Auth} from "./Auth";
 import {UserService} from "../db/Service/UserService";
+import {StaticsModel} from "../db/Model/ContentModel";
 
 export class UserRouter extends AppRouter{
     router: Router;
@@ -47,10 +48,12 @@ export class UserRouter extends AppRouter{
                     const token = this.getToken(deviceId, created._id);
 
                     const stats = {
-                        days: 1,
+                        days: 0,
                         totalDuration: 0,
-                        totalMeditations: 0
-                    };
+                        totalMeditations: 0,
+                        history: [],
+                        strike: 1
+                    } as StaticsModel;
                     res.status(StatusCodes.CREATED).send({ token, initial, stats });
                 }catch (e){
                     console.error(e.message);
@@ -59,12 +62,7 @@ export class UserRouter extends AppRouter{
 
             }else{
                 const token = this.getToken(deviceId, user._id);
-               // const stats = this.contentService.getUserStats(user.contents);
-                const stats = {
-                    days: 1,
-                    totalDuration: 0,
-                    totalMeditations: 0
-                };
+                const stats = this.contentService.getUserStats(user.contents, user.maxStrike);
                 this.userService.updateStatus(user._id);
                 res.status(StatusCodes.ACCEPTED).send({ token, initial, stats });
             }

@@ -1,13 +1,22 @@
 import {DbController} from "../DbController";
 import {CacheController} from "../../redis/CacheController";
-import {ContentModel, DefaultsModel, MenuItemModel, MoodModel, ThemeModel, UserContent} from "../Model/ContentModel";
+import {
+    ContentModel,
+    DefaultsModel, HistoryModel,
+    MenuItemModel,
+    MoodModel,
+    StaticsModel,
+    ThemeModel,
+    UserContent
+} from "../Model/ContentModel";
 import {Map} from "typescript";
+import {Dict, Utils} from "../../Utils";
 
 export class ContentService{
     private dbController:DbController;
 
     private contents : ContentModel[];
-    private contentMap : Map<ContentModel>;
+    private contentMap : Dict<ContentModel>;
     private homeContents : {
         discover: ContentModel[],
         blog: ContentModel[],
@@ -105,11 +114,10 @@ export class ContentService{
             this.blogList = blogList;
             this.discoverList = discoverList;
             this.musicList = musicList;
-            this.contentMap = {} as Map<ContentModel>;
-            // this.contents.forEach(cont => {
-            //    this.contentMap.set(cont.cid, cont);
-            // });
-
+            this.contentMap = {} as Dict<ContentModel>;
+            this.contents.forEach(cont => {
+               this.contentMap[cont.cid] = cont;
+            });
 
 
         }catch (e){
@@ -181,7 +189,32 @@ export class ContentService{
         return filtered.shift();
     }
 
-    public getUserStats(contents: UserContent[]) {
+    public getUserStats(contents: UserContent[], max: number): StaticsModel {
+        const days: string[] = [];
         let duration = 0;
+        let stats = {
+            totalDuration : 0,
+            totalMeditations : contents.length,
+            days: 0,
+            strike: max,
+            history: []
+        } as StaticsModel;
+
+        contents.forEach(cont =>{
+           let content = this.contentMap[cont.cid];
+           stats.history.push({
+               title: content.title,
+               time: cont.time
+           } as HistoryModel);
+            days.push(Utils.timeConverter(cont.time));
+            duration += cont.dur;
+        });
+
+        // @ts-ignore
+        const distinct = new Set(days);
+        stats.days = distinct.size;
+        stats.totalDuration = duration;
+
+        return stats;
     }
 }

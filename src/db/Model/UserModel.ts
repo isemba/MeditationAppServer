@@ -6,6 +6,7 @@ export class UserModel{
     contents?: UserContent [];
     last: number;
     strike: number;
+    maxStrike: number;
 
 
     constructor(deviceId: string) {

@@ -71,6 +71,7 @@ export class DbController{
                   newUser.contents = [];
                   newUser.last = data.last;
                   newUser.strike = data.strike;
+                  newUser.maxStrike = data.maxStrike;
                   resolve(newUser);
               });
           }catch (e){
@@ -119,6 +120,9 @@ export class DbController{
                         const user = new UserModel(res.deviceId);
                         user._id = res._id.toHexString();
                         user.contents = res.contents;
+                        user.maxStrike = res.maxStrike;
+                        user.strike = res.strike;
+                        user.last = res.last;
                         resolve(user);
                     }
                 })
@@ -185,6 +189,9 @@ export class DbController{
                         user.strike = 1;
                     }else{
                         user.strike += strike;
+                        if(user.maxStrike < user.strike){
+                            user.maxStrike = user.strike;
+                        }
                     }
                 }else{
                     user.strike = 1;

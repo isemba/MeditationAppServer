@@ -43,7 +43,20 @@ export type GroupModel = {
 }
 
 export type UserContent = {
-    cid: number,
-    dur: number,
+    cid: number;
+    dur: number;
+    time: number;
+}
+
+export type StaticsModel = {
+    days: number;
+    totalDuration: number;
+    totalMeditations: number;
+    strike: number;
+    history: HistoryModel[];
+}
+
+export type HistoryModel = {
+    title: string;
     time: number;
 }

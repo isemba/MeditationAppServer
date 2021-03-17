@@ -8,6 +8,7 @@ export class UserSchema{
             age:Number,
             contents: Array,
             strike: Number,
+            maxStrike: Number,
             last: Number
         });
     }
