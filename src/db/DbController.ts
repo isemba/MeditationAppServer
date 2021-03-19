@@ -61,6 +61,7 @@ export class DbController{
           try {
               const model = new this.userModel(user);
               model.strike = 0;
+              model.maxStrike = 0;
               model.last = Date.now();
               model.contents = [];
 
@@ -178,7 +179,7 @@ export class DbController{
                 const contents = user.contents as UserContent[];
                 const entry = {
                     cid,
-                    dur,
+                    dur : Math.round(dur / 1000),
                     time: Date.now()
                 } as UserContent;
 
