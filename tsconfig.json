@@ -5,6 +5,7 @@
     "declaration": false,
     "target": "es5",
     "sourceMap": true,
+    "skipLibCheck" : true,
     "outDir": "dist/",
     "allowSyntheticDefaultImports": true,
     "allowJs": false,
