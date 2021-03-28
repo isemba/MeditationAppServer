@@ -213,7 +213,7 @@ export class ContentService{
         // @ts-ignore
         const distinct = new Set(days);
         stats.days = distinct.size;
-        stats.totalDuration = Math.round(duration / 60);
+        stats.totalDuration = duration;
 
         return stats;
     }
