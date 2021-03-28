@@ -27,7 +27,7 @@ const app = express();
         Auth.init(secretKey);
         const dbController = new DbController(mongoURI);
         await dbController.connect();
-        CacheController.init();
+        //CacheController.init();
 
         const contentService = new ContentService(dbController);
         await contentService.loadContents();
