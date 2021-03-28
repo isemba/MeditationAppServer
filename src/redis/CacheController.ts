@@ -62,7 +62,7 @@ export class CacheController{
 
     public setMusic(list: ContentModel[]){
         const json = JSON.stringify(list);
-        return null' //this.setAsync(RedisKeys.MUSIC_LIST, json);
+        return null; //this.setAsync(RedisKeys.MUSIC_LIST, json);
     }
 
 
