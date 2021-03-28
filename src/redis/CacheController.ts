@@ -48,7 +48,7 @@ export class CacheController{
     }
 
     public getBlog(){
-        return this.getAsync(RedisKeys.BLOG_LIST);
+        return null; //this.getAsync(RedisKeys.BLOG_LIST);
     }
 
     public setBlog(list: ContentModel[]){
