@@ -6,7 +6,6 @@
     "target": "es5",
     "sourceMap": true,
     "outDir": "dist/",
-    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": false,
     "typeRoots" : ["./node_modules/@types/"]
