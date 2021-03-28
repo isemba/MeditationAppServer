@@ -6,7 +6,7 @@ import { DbController } from "./db/DbController";
 import { ContentRouter } from "./routes/ContentRouter";
 import { ContactRouter } from "./routes/ContactRouter";
 import { Auth } from "./routes/Auth";
-import {CacheController} from "./redis/CacheController";
+//import {CacheController} from "./redis/CacheController";
 import {ContentService} from "./db/Service/ContentService";
 import {UserService} from "./db/Service/UserService";
 
