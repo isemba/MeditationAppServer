@@ -14,8 +14,7 @@ env.config({
     path: process.cwd() + "/.env"
 })
 
-//const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/meditation';
-const mongoURI = "mongodb+srv://sahaJBTamn9911:JVOGfUbTKzesNeVU@cluster0.xflyo.mongodb.net/meditation?retryWrites=true&w=majority";
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/meditation';
 const secretKey: string = process.env.SECRET_KEY || "test.key";
 const port: number = Number(process.env.PORT) || 3000;
 
