@@ -3,7 +3,9 @@ import {UserSchema} from "./Schema/UserSchema";
 import {UserModel} from "./Model/UserModel";
 import {Model} from "mongoose";
 import {ContentSchema} from "./Schema/ContentSchema";
-import {ContentModel, DefaultsModel, ThemeModel, UserContent} from "./Model/ContentModel";
+import {ContactSchema} from "./Schema/ContactSchema";
+import {ContactModel} from "./Model/ContactModel";
+import {ContentModel, DefaultsModel, ThemeModel, UserContent } from "./Model/ContentModel";
 import {DefaultsSchema} from "./Schema/DefaultsSchema";
 import {ThemeSchema} from "./Schema/ThemeSchema";
 import {Utils} from "../Utils";
@@ -15,6 +17,7 @@ export class DbController{
     private contentModel : Model<any>;
     private defaultsModel : Model<any>;
     private themeModel : Model<any>;
+    private contactModel : Model<any>;
 
     constructor(uri: string) {
         this._uri = uri;
@@ -38,6 +41,7 @@ export class DbController{
                 this.contentModel = mongoose.model("contents", new ContentSchema().schema);
                 this.defaultsModel = mongoose.model("defaults", new DefaultsSchema().schema);
                 this.themeModel = mongoose.model("themes", new ThemeSchema().schema);
+                this.contactModel = mongoose.model("contact", new ContactSchema().schema);
 
                 mongoose.connect(this._uri, options, err=>{
                     if(err){
@@ -73,6 +77,25 @@ export class DbController{
                   newUser.strike = data.strike;
                   newUser.maxStrike = data.maxStrike;
                   resolve(newUser);
+              });
+          }catch (e){
+              reject(e);
+          }
+       });
+    }
+
+
+    public createContact(contact:ContactModel):Promise<ContactModel>{
+       return new Promise((resolve, reject)=>{
+          try {
+              const model = new this.contactModel(contact);
+              model.strike = 0;
+              model.last = Date.now();
+              model.contents = [];
+
+              model.save((err, data) =>{
+                if (err) return reject(err);
+                resolve(model);
               });
           }catch (e){
               reject(e);

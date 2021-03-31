@@ -1,15 +1,17 @@
 import {AppRouter} from "./AppRouter";
 import { Router, Response, Request } from "express";
 import {StatusCodes} from "http-status-codes";
-import {ContentService} from "../db/Service/ContentService";
+import {ContactService} from "../db/Service/ContactService";
 import {Auth} from "./Auth";
+
 
 export class ContactRouter extends AppRouter{
     router: Router;
 
-    private service: ContentService;
+    private service: ContactService;
 
-    constructor(service: ContentService) {
+
+    constructor(service: ContactService) {
         super();
         this.router = Router();
         this.service = service;
@@ -18,24 +20,47 @@ export class ContactRouter extends AppRouter{
     }
 
     addRoutes(): void {
-        this.router.post("/", Auth.checkToken, this.getContact.bind(this));
+        this.router.post("/",  this.getContact.bind(this));
     }
 
     private async getContact(req: Request, res: Response){
         try {
-            let { message } = req.body;
+            let { name, mail, message } = req.body;
             if(message == null) return res.status(StatusCodes.BAD_REQUEST).send({message: "message needed!"});
+            this.service.createContact(name, mail,message);
+
+
+              var nodemailer = require('nodemailer');
+              var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: 'devicesendmail@gmail.com',
+                  pass: 'udqailgpjaqdrmsb'
+                }
+              });
+
+              var mailOptions = {
+                from: 'Sahaja Yoga <devicesendmail@gmail.com>',
+                to: 'sahaja.yoga.meditasyon@gmail.com',
+                bcc: 'ebagci@gmail.com',
+                subject: 'Sahaja Yoga İletişim',
+                html: 'İsim : ' + name + '<br />Email : ' + mail + '<br />Mesaj : ' + message
+              };
+
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
+
             res.status(StatusCodes.OK).send({ message: "Talebinizi kaydettik teşekkür ederiz." });
         }catch (e){
 
         }
     }
 
-    private getVideos(req: Request, res: Response){
-        console.log(req.body);
-        res.status(StatusCodes.OK).send({
-            videos: ["video1", "video2"]
-        });
-    }
+
 
 }

@@ -9,6 +9,7 @@ import { Auth } from "./routes/Auth";
 //import {CacheController} from "./redis/CacheController";
 import {ContentService} from "./db/Service/ContentService";
 import {UserService} from "./db/Service/UserService";
+import {ContactService} from "./db/Service/ContactService";
 
 env.config({
     path: process.cwd() + "/.env"
@@ -33,11 +34,12 @@ const app = express();
         await contentService.loadContents();
 
         const userService = new UserService(dbController);
+        const contactService = new ContactService(dbController);
 
         app.use(bodyParser.json());
         app.use("/user", new UserRouter(userService, contentService).router);
         app.use("/content", new ContentRouter(contentService).router);
-        app.use("/contact", new ContactRouter(contentService).router);
+        app.use("/contact", new ContactRouter(contactService).router);
 
 
         app.listen(port, (): void => {
