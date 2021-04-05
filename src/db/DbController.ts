@@ -161,7 +161,7 @@ export class DbController{
                 this.contentModel.find( {}, (err, res)=>{
                     if(err) return reject(err);
                     resolve(res);
-                })
+                }).sort({ cid : 1 })
             }catch (e){
                 reject(e);
             }
