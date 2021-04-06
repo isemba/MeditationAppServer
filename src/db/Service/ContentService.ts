@@ -204,7 +204,7 @@ export class ContentService{
            let content = this.contentMap[cont.cid];
            stats.history.push({
                title: content.title,
-               time: cont.time / 60 / 1000
+               time: Math.round(cont.time / 60 / 1000)
            } as HistoryModel);
             days.push(Utils.timeConverter(cont.time));
             duration += cont.dur/ 60 / 1000;
