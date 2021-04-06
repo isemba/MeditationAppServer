@@ -204,10 +204,10 @@ export class ContentService{
            let content = this.contentMap[cont.cid];
            stats.history.push({
                title: content.title,
-               time: parseInt(cont.time / 60 / 1000)
+               time: parseInt(parseInt(cont.time) / 60 / 1000)
            } as HistoryModel);
             days.push(Utils.timeConverter(cont.time));
-            duration += parseInt(cont.dur / 60 / 1000);
+            duration += parseInt(parseInt(cont.dur) / 60 / 1000);
         });
 
         // @ts-ignore
