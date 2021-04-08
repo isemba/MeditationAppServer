@@ -68,8 +68,8 @@ export class UserRouter extends AppRouter{
             }
 
         }catch (e){
-            console.error(e.message);
-            res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu!"});
+            console.error(e);
+            res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu! !"});
         }
     }
 

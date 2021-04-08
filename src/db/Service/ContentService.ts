@@ -100,7 +100,8 @@ export class ContentService{
                 if(content){
                     const moodContent = {
                         title: mood.title,
-                        url: content.url
+                        url: content.url,
+                        cid: content.cid
                     } as ContentModel;
                     homeContents.moods.push(moodContent);
                 }
@@ -204,10 +205,10 @@ export class ContentService{
            let content = this.contentMap[cont.cid];
            stats.history.push({
                title: content.title,
-               time: Math.round(cont.time  )
+               time: Math.round(cont.time )
            } as HistoryModel);
             days.push(Utils.timeConverter(cont.time));
-            duration += cont.dur/ 60 / 1000;
+            duration += cont.dur / 60 / 1000 ;
         });
 
         // @ts-ignore

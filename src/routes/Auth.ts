@@ -23,6 +23,7 @@ export class Auth{
         try {
             const strSession = Auth.getDecrypt(token);
             if(strSession != null){
+             
                 const session = JSON.parse(strSession) as {at: number};
                 if(Auth.isValid(session.at)){
                     req.body = {...req.body, session};
