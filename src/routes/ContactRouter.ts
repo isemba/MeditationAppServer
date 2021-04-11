@@ -32,7 +32,10 @@ export class ContactRouter extends AppRouter{
 
               var nodemailer = require('nodemailer');
               var transporter = nodemailer.createTransport({
-                service: 'gmail',
+                //service: 'gmail',
+                host: 'mail.sahajayogameditasyon.com',
+                port:465,
+                secure:false,
                 auth: {
                   user: 'devicesendmail@gmail.com',
                   pass: 'udqailgpjaqdrmsb'
@@ -40,10 +43,10 @@ export class ContactRouter extends AppRouter{
               });
 
               var mailOptions = {
-                from: 'Sahaja Yoga <devicesendmail@gmail.com>',
+                from: 'Sahaja Yoga <info@sahajayogameditasyon.com>',
                 to: 'sahaja.yoga.meditasyon@gmail.com',
-                bcc: 'ebagci@gmail.com',
-                subject: 'Sahaja Yoga İletişim',
+                cc: 'info@sahajayogameditasyon.com',
+                subject: 'Sahaja Yoga İletişim Uygulama',
                 html: 'İsim : ' + name + '<br />Email : ' + mail + '<br />Mesaj : ' + message
               };
 
