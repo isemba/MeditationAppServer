@@ -35,7 +35,7 @@ export class ContactRouter extends AppRouter{
                 //service: 'gmail',
                 host: 'mail.sahajayogameditasyon.com',
                 port:465,
-                secure:false,
+                secure:true,
                 auth: {
                   user: 'devicesendmail@gmail.com',
                   pass: 'udqailgpjaqdrmsb'
