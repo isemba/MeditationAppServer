@@ -37,15 +37,15 @@ export class ContactRouter extends AppRouter{
                 port:465,
                 secure:true,
                 auth: {
-                  user: 'devicesendmail@gmail.com',
-                  pass: 'udqailgpjaqdrmsb'
+                  user: 'info@sahajayogameditasyon.com',
+                  pass: 'Pranamana+'
                 }
               });
 
               var mailOptions = {
                 from: 'Sahaja Yoga <info@sahajayogameditasyon.com>',
                 to: 'sahaja.yoga.meditasyon@gmail.com',
-                cc: 'info@sahajayogameditasyon.com',
+                bcc: 'info@sahajayogameditasyon.com',
                 subject: 'Sahaja Yoga İletişim Uygulama',
                 html: 'İsim : ' + name + '<br />Email : ' + mail + '<br />Mesaj : ' + message
               };
