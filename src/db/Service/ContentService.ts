@@ -212,8 +212,8 @@ export class ContentService{
         });
 
         // @ts-ignore
-        const distinct = new Set(days);
-        stats.days = distinct.size;
+        const distinct =  new Set(days);
+        stats.days = Math.round(duration / 60 / 24); // distinct.size;
         stats.totalDuration = Math.round(duration);
 
         return stats;
