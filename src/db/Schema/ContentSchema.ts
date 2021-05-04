@@ -11,7 +11,8 @@ export class ContentSchema{
             url: String,
             body: String,
             desc: String,
-            group: Object
+            group: Object,
+            vimeo: String
         });
     }
 

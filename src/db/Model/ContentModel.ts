@@ -10,6 +10,7 @@ export type ContentModel = {
     body?: string;
     desc?: string;
     group: GroupModel;
+    vimeo?:string;
 }
 
 export type DefaultsModel = {
