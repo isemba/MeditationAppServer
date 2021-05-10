@@ -5,6 +5,7 @@ import { UserRouter } from "./routes/UserRouter";
 import { DbController } from "./db/DbController";
 import { ContentRouter } from "./routes/ContentRouter";
 import { ContactRouter } from "./routes/ContactRouter";
+import { AdminRouter } from "./routes/AdminRouter";
 import { Auth } from "./routes/Auth";
 //import {CacheController} from "./redis/CacheController";
 import {ContentService} from "./db/Service/ContentService";
@@ -33,10 +34,12 @@ const app = express();
         const contentService = new ContentService(dbController);
         await contentService.loadContents();
 
-        const userService = new UserService(dbController);
+        const userService = new UserService(dbController); 
         const contactService = new ContactService(dbController);
 
         app.use(bodyParser.json());
+        app.use('/adminpanel', express.static('public'))
+        app.use("/admin", new AdminRouter(contentService).router);
         app.use("/user", new UserRouter(userService, contentService).router);
         app.use("/content", new ContentRouter(contentService).router);
         app.use("/contact", new ContactRouter(contactService).router);

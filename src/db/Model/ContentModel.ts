@@ -1,6 +1,6 @@
 import {Types} from "mongoose";
 
-export type ContentModel = {
+export class ContentModel {
     _id: Types.ObjectId;
     cid: string;
     title: string;
@@ -11,6 +11,10 @@ export type ContentModel = {
     desc?: string;
     group: GroupModel;
     vimeo?:string;
+
+    constructor() {
+    }
+
 }
 
 export type DefaultsModel = {

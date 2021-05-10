@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/gridjs/dist/gridjs.production.min.js"></script>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="tooltipster/dist/css/tooltipster.bundle.min.css"/>
+
+    <title>Admin Panel</title>
+  </head>
+  <body>
+    <a name="home"></a>
+    <div class="content">
+
+      <div class="container">
+
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+
+            <div class="row align-items-center">
+              <div class="col-lg-7 mb-5 mb-lg-0">
+
+                <h2 class="mb-5">Sahaja Yoga
+                </h2>
+
+                <form class="border-right pr-5 mb-5" method="post" id="contactForm" name="contactForm">
+                  <input type="hidden" id="tid" value=""/>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <input type="text" class="form-control" name="ttile" id="ttitle" placeholder="Başlık">
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 form-group">
+                      <input type="text" class="form-control" name="tcid" id="tcid" placeholder="CID">
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <select class="form-control" name="tmedia" id="tmedia" placeholder="Tip">
+                        <option value="0">Tür Seçiniz</option>
+                        <option value="video">Video</option>
+                        <option value="blog">Blog</option>
+                        <option value="music">Müzik</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11 form-group">
+                      <input type="text" class="form-control" name="turl" id="turl" placeholder="Amazon Imaj Link">
+                    </div>
+                    <div class="col-md-1 tooltipimage">
+                      <img src="images/information.png" class="tooltip" title="[Amazon Imaj Link] Amazon S3 atılan foto linki girilir"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11 form-group">
+                      <input type="text" class="form-control" name="timage" id="timage" placeholder="Amazon Muzik Link">
+                    </div>
+                    <div class="col-md-1 tooltipimage">
+                      <img src="images/information.png" class="tooltip" title="[Amazon Muzik Link] Mp3 dosyası girilmesi gerekiyorsa"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11 form-group  ">
+                      <input type="text" class="form-control" name="tvimeo" id="tvimeo" placeholder="Vimeo Link">
+
+                    </div>
+                    <div class="col-md-1 tooltipimage">
+                      <img src="images/information.png" class="tooltip" title="[Vimeo Link] Video File Link Example : https://player.vimeo.com/external/542800872.hd.mp4?s=7a32f7aeae62d84bbaf5d561ab5634be2f4384fd&profile_id=175"/>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 form-group">
+                      <select class="form-control" name="tgroup" id="tgroup" placeholder="Grup">
+                        <option value="0">Kategori Seçiniz</option>
+                        <option value="1">Başlangıç</option>
+                        <option value="1_1">Meditasyon Müzikleri</option>
+                        <option value="2">Aydınlanma Meditasyonu</option>
+                        <option value="3">Hızlı Başla</option>
+                        <option value="4">Elementler</option>
+                        <option value="5">Mantralı Meditasyon</option>
+                        <option value="12">Stres Yönetimi</option>
+                        <option value="13">Dikkat Meditasyonu</option>
+                        <option value="14">Yedi Adım</option>
+                        <option value="15">Blog</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <input type="submit" value="Kaydet" class="btn btn-primary rounded-0 py-2 px-4">
+                      <span class="submitting"></span>
+                    </div>
+                  </div>
+                </form>
+
+                <div id="form-message-warning mt-4"></div>
+                <div id="form-message-success">
+                  Kaydınız alındı.
+                </div>
+
+              </div>
+              <div class="col-lg-4 ml-auto">
+                <h3 class="mb-4">İstatistikler</h3>
+                <p>Toplam kullanıcı :
+                  <span id="totaluser">{totaluser}</span>
+                </p>
+                <p>Toplam İçerik :
+                  <span id="totalcontent">{totalcontent}</span>
+                </p>
+                <p>Toplam İletişim Formu :
+                  <span id="totalcontact">{totalcontact}</span>
+                </p>
+                <hr/>
+                <p>
+                  <a href="#iceriklistesi">İçerikleri Göster</a>
+                </p>
+                <p>
+                  <a href="#home" onclick="editEvent('')">Yeni İçerik Ekle</a>
+                </p>
+
+              </div>
+
+            </div>
+            <hr/><br/><br/>
+            <a name="iceriklistesi"></a>
+            <h3 class="mb-4">İçerikler</h3>
+            <div id="wrapper"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="tooltipster/dist/js/tooltipster.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+
+      var grid = new gridjs.Grid({
+        columns: [
+          "CID",
+          "Title",
+          "Tür",
+          "Kategori", {
+            name: '',
+            sort: false,
+            width: '100px',
+            id: "action",
+            formatter: (cell) => gridjs.html("<button class=\"mb-2 mr-2 btn btn-primary\"   onclick=\"editEvent('" + cell + "')\">Düzenle</button> "),
+            attributes: (cell) => {
+              return {'data-cell-content': 'CID', 'style': '', 'class': 'gridjs-th gridjs-td', 'data-id': cell};
+            }
+          }
+        ],
+        data: [
+          ["1", "john@example.com", "(353) 01 222 3333", "(353) 01 222 3333", "1"]
+        ],
+        sort: true,
+        pagination: {
+          enabled: true,
+          limit: 10,
+          summary: false
+        },
+        search: true,
+        language: {
+          'noRecordsFound': 'Kayıt bulunamadı',
+          'search': {
+            'placeholder': '🔍 Arama...'
+          },
+          'pagination': {
+            'previous': '<',
+            'next': '>',
+            'showing': '😃 ',
+            'results': () => ''
+          }
+        }
+      }).render(document.getElementById("wrapper"));
+
+      function updateGrid(data) {
+        grid.updateConfig({data: data}).forceRender();
+      }
+    </script>
+
+  </body>
+</html>
