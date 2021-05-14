@@ -75,7 +75,19 @@ $(function() {
     $.LoadingOverlay("hide");
   }, 3000);
   $('.tooltip').tooltipster();
+
+
   getStats();
+
+});
+
+$(document).ready(function() {
+
+  $('#tooltipvimeo').tooltipster({
+     contentAsHTML: true,
+     content: '<div class="vimeocontainer"> Sağdaki kutudan Vimeo ID yazarak aşağıdaki linklere ulaşılır. <br /><br /> <img src="images/vimeo.png" />  </div>'
+  });
+
 
 });
 

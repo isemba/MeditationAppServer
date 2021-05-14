@@ -72,7 +72,7 @@
 
                     </div>
                     <div class="col-md-1 tooltipimage">
-                      <img src="images/information.png" class="tooltip" title="[Vimeo Link] Video File Link Example : https://player.vimeo.com/external/542800872.hd.mp4?s=7a32f7aeae62d84bbaf5d561ab5634be2f4384fd&profile_id=175"/>
+                      <img src="images/information.png" class="" id="tooltipvimeo"/>
                     </div>
                   </div>
                   <div class="row">
@@ -85,6 +85,12 @@
                         <option value="3">Hızlı Başla</option>
                         <option value="4">Elementler</option>
                         <option value="5">Mantralı Meditasyon</option>
+                        <option value="6">Olumlama Meditasyonu</option>
+                        <option value="7">Müzikle Meditasyon 1</option>
+                        <option value="8">Müzikle Meditasyon 2</option>
+                        <option value="9">Teşekkür Meditasyonu</option>
+                        <option value="10">Nefes Egzersizi</option>
+                        <option value="11">Uyku Öncesi Meditasyonu</option>
                         <option value="12">Stres Yönetimi</option>
                         <option value="13">Dikkat Meditasyonu</option>
                         <option value="14">Yedi Adım</option>
@@ -126,6 +132,18 @@
                   <a href="#home" onclick="editEvent('')">Yeni İçerik Ekle</a>
                 </p>
 
+                <hr/>
+
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <input type="text" class="form-control" name="tvimeoid" id="tvimeoid" placeholder="Vimeo ID (547679669)">
+                  </div>
+                  <div class="col-md-6 form-group">
+                    <input type="button" value="Link Al" onclick="openVimeoId()" class="btn btn-primary rounded-0 py-2 px-4">
+                  </div>
+
+                </div>
+
               </div>
 
             </div>
@@ -147,6 +165,10 @@
     <script src="js/jquery.validate.min.js"></script>
     <script src="js/main.js"></script>
     <script type="text/javascript">
+
+      function openVimeoId() {
+        window.open('https://vimeo.com/manage/' + $("#tvimeoid").val() + '/distribution#video-file-links');
+      }
 
       var grid = new gridjs.Grid({
         columns: [

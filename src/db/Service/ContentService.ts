@@ -241,6 +241,24 @@ export class ContentService {
       else if (group == "5") {
         groupname = "Mantralı Meditasyon";
       }
+      else if (group == "6") {
+        groupname = "Olumlama Meditasyonu";
+      }
+      else if (group == "7") {
+        groupname = "Müzikle Meditasyon 1";
+      }
+      else if (group == "8") {
+        groupname = "Müzikle Meditasyon 2";
+      }
+      else if (group == "9") {
+        groupname = "Teşekkür Meditasyonu";
+      }
+      else if (group == "10") {
+        groupname = "Nefes Egzersizi";
+      }
+      else if (group == "11") {
+        groupname = "Uyku Öncesi Meditasyonu";
+      }
       else if (group == "12") {
         groupname = "Stres Yönetimi";
       }
