@@ -74,8 +74,8 @@ export class ContentService {
 
       contents.forEach((content, index) => {
 
-        content.image = content.image.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
-        content.url = content.url.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
+        content.image = content.image.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "");
+        content.url = content.url.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "");
 
         if (content.media == "blog") {
           blogList.push(content);
