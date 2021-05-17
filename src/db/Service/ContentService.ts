@@ -155,7 +155,7 @@ export class ContentService {
     let lastGroupId = -1;
     const sorted = filteredContent.sort((current, next) => current.group.id - next.group.id);
     sorted.forEach(content => {
-      if (content.group.id > 0) {
+      if (content.group.id > 1 || content.media == "music" ) {
         if (lastGroupId !== content.group.id) {
           lastGroupId = content.group.id;
           const menuItem = {
