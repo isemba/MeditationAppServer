@@ -73,6 +73,10 @@ export class ContentService {
       }
 
       contents.forEach((content, index) => {
+
+        content.image = content.image.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
+        content.url = content.url.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
+
         if (content.media == "blog") {
           blogList.push(content);
         } else if (content.media == "music") {
@@ -156,6 +160,10 @@ export class ContentService {
     const sorted = filteredContent.sort((current, next) => current.group.id - next.group.id);
     sorted.forEach(content => {
       if (content.group.id > 1 || content.media == "music" ) {
+
+        content.image = content.image.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
+        content.url = content.url.replace("https://sahajayoga-assets.s3-eu-west-1.amazonaws.com/", "/");
+
         if (lastGroupId !== content.group.id) {
           lastGroupId = content.group.id;
           const menuItem = {
@@ -305,6 +313,24 @@ export class ContentService {
       }
       else if (group == "5") {
         groupname = "Mantralı Meditasyon";
+      }
+      else if (group == "6") {
+        groupname = "Olumlama Meditasyonu";
+      }
+      else if (group == "7") {
+        groupname = "Müzikle Meditasyon 1";
+      }
+      else if (group == "8") {
+        groupname = "Müzikle Meditasyon 2";
+      }
+      else if (group == "9") {
+        groupname = "Teşekkür Meditasyonu";
+      }
+      else if (group == "10") {
+        groupname = "Nefes Egzersizi";
+      }
+      else if (group == "11") {
+        groupname = "Uyku Öncesi Meditasyonu";
       }
       else if (group == "12") {
         groupname = "Stres Yönetimi";
