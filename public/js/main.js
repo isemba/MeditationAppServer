@@ -76,8 +76,8 @@ $(function() {
   }, 3000);
   $('.tooltip').tooltipster();
 
-
-  getStats();
+  reStartServer();
+  //getStats();
 
 });
 
@@ -90,6 +90,19 @@ $(document).ready(function() {
 
 
 });
+
+function reStartServer() {
+
+  getData("/admin/restartserver", {
+  		"id": ""
+  	}, function(response) {
+
+  		 setTimeout(function() { getStats(); } , 3000);
+
+  	});
+
+
+}
 
 function getStats() {
 
