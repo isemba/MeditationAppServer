@@ -76,8 +76,8 @@ $(function() {
   }, 3000);
   $('.tooltip').tooltipster();
 
-  reStartServer();
-  //getStats();
+  //reStartServer();
+  getStats();
 
 });
 
