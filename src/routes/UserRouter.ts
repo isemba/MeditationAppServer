@@ -1,5 +1,5 @@
 import {AppRouter} from "./AppRouter";
-import { Router, Request, Response } from "express";
+import {Router, Request, Response } from "express";
 import {StatusCodes} from "http-status-codes";
 import {ContentService} from "../db/Service/ContentService";
 import {UserModel} from "../db/Model/UserModel";
@@ -24,7 +24,6 @@ export class UserRouter extends AppRouter{
         });
 
         this.addRoutes();
-
     }
 
     addRoutes(): void {
@@ -60,20 +59,20 @@ export class UserRouter extends AppRouter{
                     res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu!"});
                 }
 
-            }else{
+            } else {
                 const token = this.getToken(deviceId, user._id);
                 const stats = this.contentService.getUserStats(user.contents, user.maxStrike);
                 this.userService.updateStatus(user._id);
                 res.status(StatusCodes.ACCEPTED).send({ token, initial, stats });
             }
 
-        }catch (e){
+        } catch (e){
             console.error(e);
             res.status(StatusCodes.SERVICE_UNAVAILABLE).send({message: "Bir hata oluştu! !"});
         }
     }
 
-    private getToken(deviceId, id):string{
+    private getToken(deviceId, id):string {
         const payload = { deviceId, id, at: Date.now() }
         const json = JSON.stringify(payload);
         return Auth.getEncrypt(json);

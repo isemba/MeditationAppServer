@@ -1,10 +1,10 @@
 import {AppRouter} from "./AppRouter";
-import { Router, Response, Request } from "express";
+import {Router, Response, Request } from "express";
 import {StatusCodes} from "http-status-codes";
 import {ContentService} from "../db/Service/ContentService";
 import {Auth} from "./Auth";
 
-export class ContentRouter extends AppRouter{
+export class ContentRouter extends AppRouter {
     router: Router;
 
     private service: ContentService;
